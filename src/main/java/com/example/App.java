@@ -27,6 +27,8 @@ public class App extends Application {
 
     private static Scene scene;
 
+    private double mouseAnchorX;
+    private double mouseAnchorY;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -72,8 +74,9 @@ public class App extends Application {
         // and moving the group around - this is stupid code and not so efficient, but it works
         Rotate worldRotX = new Rotate(0, Rotate.X_AXIS);
         Rotate worldRotY = new Rotate(0, Rotate.Y_AXIS);
+        Rotate worldRotZ = new Rotate(0, Rotate.Z_AXIS);
 
-        g.getTransforms().addAll(worldRotY, worldRotX);
+        g.getTransforms().addAll(worldRotY, worldRotX, worldRotZ);
         
 
         // Keyboard event handler for camera controls
@@ -116,6 +119,14 @@ public class App extends Application {
                 case W:
                     g.setTranslateY(g.getTranslateY() - 10);
                     break;
+                case R:
+                    worldRotZ.setAngle(worldRotZ.getAngle() + 2);
+                    System.out.println(worldRotZ);
+                    break;
+                case F:
+                    worldRotZ.setAngle(worldRotZ.getAngle() - 2);
+                    System.out.println(worldRotZ);
+                    break;
                 // todo - get mouse controls to move the camera
                 // todo - add key controls to change the molecule shown
                 // todo - add overlay UI to show controls and molecule info
@@ -134,6 +145,23 @@ public class App extends Application {
             }
         });
         s.setCamera(cam);
+
+        s.setOnMousePressed(e -> {
+            mouseAnchorX = e.getSceneX();
+            mouseAnchorY = e.getSceneY();
+        });
+ 
+
+        s.setOnMouseDragged(e -> {
+            double deltaX = e.getSceneX() - mouseAnchorX;
+            double deltaY = e.getSceneY() - mouseAnchorY;
+
+            g.setTranslateX(g.getTranslateX() + deltaX);
+            g.setTranslateY(g.getTranslateY() + deltaY);
+
+            mouseAnchorX = e.getSceneX();
+            mouseAnchorY = e.getSceneY();
+        });
 
         // General iteration code for adding atoms and bonds to groups
             for (Shape3D shape : shapes) {
@@ -159,6 +187,4 @@ public class App extends Application {
     public static void main(String[] args) {
         launch();
     }
-
-
 }
