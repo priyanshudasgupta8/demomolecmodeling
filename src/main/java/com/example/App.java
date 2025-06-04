@@ -30,7 +30,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        
         stage.setTitle("test");
 
         // Create a list of shapes to hold the atoms and bonds
@@ -64,7 +64,8 @@ public class App extends Application {
         Group g2 = new Group();
 
         // scene - window created (?)
-        Scene s = new Scene(g , 1000, 500);
+        // 4th parameter always true to enable correct 3d behavior
+        Scene s = new Scene(g, 1000, 500, true);
         s.setFill(Color.BLANCHEDALMOND);
 
         // how we are handling key presses here - instead or rotating the camera, we are rotating the world
