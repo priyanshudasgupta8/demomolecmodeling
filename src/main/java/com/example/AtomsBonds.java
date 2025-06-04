@@ -4,7 +4,6 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.Shape3D;
 import javafx.scene.shape.Sphere;
 // todo: find out the atomic sizes of each atom and match it to radius
 public class AtomsBonds {
@@ -97,35 +96,60 @@ public class AtomsBonds {
     public static Group makeProtein(Group R_group, int x, int y) {
         Group protein = new Group();
 
-        // central carbon + hydrogen
+        // alpha carbon + hydrogen
         protein.getChildren().add(Carbon(x, y));
         protein.getChildren().add(Bond(x, y - 30));
-        
-        Cylinder b = Bond(x, y-30);
-        protein.getChildren().add(b);
         protein.getChildren().add(Hydrogen(x, y - 60));
 
+        protein.getChildren().add(Bond(x, y + 30));
+
         /* weird thing with bond rotation - you can't rotate the bond in the constructor
-        so we have to do it after ---- also you can't do it when adding into group soooooo
+        so we have to do it after (because method returns null) ---- also you can't do it when adding into group soooooo
         also these are not actually accurate in position but its more simple rn hahahaha
         actual bonds are angled but we'll do it later */
 
         Cylinder b1 = Bond(x+30, y);
-        b1.rotateProperty().set(90);
+        b1.rotateProperty().set(109.5);
         protein.getChildren().add(b1);
         Cylinder b2 = Bond(x-30, y);
-        b2.rotateProperty().set(90);
+        b2.rotateProperty().set(-109.5);
         protein.getChildren().add(b2);
 
         // amino group
         protein.getChildren().add(Nitrogen(x - 60, y));
-        Cylinder b3 = Bond(x-75, y+15);
+        
+        Cylinder b3 = Bond(x-81, y+21);
         b3.rotateProperty().set(45);
-        Cylinder b4 = Bond(x-75, y-15);
+
+        Cylinder b4 = Bond(x-81, y-21);
         b4.rotateProperty().set(135);
 
         protein.getChildren().add(b3);
         protein.getChildren().add(b4);
+        protein.getChildren().add(Hydrogen(x - 111, y + 42));
+        protein.getChildren().add(Hydrogen(x - 111, y - 42));
+
+        // carboxyl group
+        // todo - make this mathematically correct
+        protein.getChildren().add(Carbon(x + 60, y+15));
+        Cylinder b5 = Bond(x + 90, y - 6);
+        b5.rotateProperty().set(45);
+        protein.getChildren().add(b5);
+        Cylinder b52 = Bond(x + 68, y - 17);
+        b52.rotateProperty().set(45);
+        protein.getChildren().add(b52);
+
+        protein.getChildren().add(Oxygen(x + 95, y - 35));
+        
+
+
+        Cylinder b6 = Bond(x + 90, y + 36);
+        b6.rotateProperty().set(135);
+        protein.getChildren().add(b6);
+        protein.getChildren().add(Oxygen(x + 111, y + 57));
+        Cylinder b7 = Bond(x + 111, y + 87);
+        protein.getChildren().add(b7);
+        protein.getChildren().add(Hydrogen(x + 111, y + 117));
 
 
 
