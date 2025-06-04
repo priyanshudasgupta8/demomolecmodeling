@@ -1,20 +1,19 @@
 package com.example;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.Shape3D;
-import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
@@ -32,28 +31,46 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        BorderPane root = new BorderPane();
         
         stage.setTitle("test");
 
-        // Create a list of shapes to hold the atoms and bonds
-        ArrayList<Shape3D> shapes = new ArrayList<Shape3D>();
 
-        // Create atoms and bonds
-        Sphere Oxy = AtomsBonds.Oxygen(500, 250);
-        Cylinder bond = AtomsBonds.Bond(460, 250);
-        Sphere Carb = AtomsBonds.Carbon(420, 250);
-
-        // add everything into shapers arraylist
-        shapes.add(Oxy);
-        shapes.add(Carb);
-        shapes.add(bond);
 
         Group g = AtomsBonds.makeProtein(new Group(), 200, 200);
+        g.getChildren().add(root);
 
-        /* remember: bonds have to be rotated because they are initially vertical
-        * 0 is vertical, 90 is horizontal, all intervals in between are diagonal
-        */
-        bond.rotateProperty().set(90);
+
+        ComboBox dropdown = new ComboBox<>();
+        ObservableList<String> list = dropdown.getItems();
+
+
+        list.add("Amino Acids");
+        // list.add("DNA"); - commented out because we don't have a DNA model yet
+        // list.add("RNA"); - commented out because we don't have a RNA model yet
+        list.add("Cis Fatty Acid");
+        list.add("Trans Fatty Acid");
+        list.add("Triglyceride");
+        list.add("Phospholipid");
+        list.add("Glucose");
+        list.add("Fructose");
+
+        root.setTop(dropdown);
+
+        dropdown.setOnAction(eve -> {
+            String selected = (String) dropdown.getValue();
+            g.getChildren().clear(); // clear the group before adding new items
+            switch (selected) {
+                case "Amino Acids":
+                    try {
+                        setRoot("secondary"); // Line 65 — now handled properly
+                    } catch (IOException ex) {
+                        ex.printStackTrace(); // or show an alert to the user
+                    }
+                    g.getChildren().add(AtomsBonds.makeProtein(new Group(), 200, 200));
+                    break;
+            }
+        });
 
         //Camera object
         Camera cam = new PerspectiveCamera();
@@ -146,6 +163,7 @@ public class App extends Application {
         });
         s.setCamera(cam);
 
+        //Mouse Drag --> rotates world and shit; makes u trip
         s.setOnMousePressed(e -> {
             mouseAnchorX = e.getSceneX();
             mouseAnchorY = e.getSceneY();
@@ -156,20 +174,17 @@ public class App extends Application {
             double deltaX = e.getSceneX() - mouseAnchorX;
             double deltaY = e.getSceneY() - mouseAnchorY;
 
-            g.setTranslateX(g.getTranslateX() + deltaX);
-            g.setTranslateY(g.getTranslateY() + deltaY);
+            worldRotX.setAngle(worldRotX.getAngle() + deltaY/10);
+            worldRotY.setAngle(worldRotY.getAngle() - deltaX/10);
 
             mouseAnchorX = e.getSceneX();
             mouseAnchorY = e.getSceneY();
-        });
+        });   
 
-        // General iteration code for adding atoms and bonds to groups
-            for (Shape3D shape : shapes) {
-                g.getChildren().add(shape);
-        }       
-
+        
         stage.setScene(s);
         stage.show();
+
     }
 
 
