@@ -35,11 +35,11 @@ public class App extends Application {
         
         stage.setTitle("test");
 
-
-
-        Group g = AtomsBonds.makeProtein(new Group(), 200, 200);
+        Group g = AtomsBonds.makeProtein(new Group(), 200, 200, 200);
         g.getChildren().add(root);
 
+        //Camera object
+        Camera cam = new PerspectiveCamera();
 
         ComboBox dropdown = new ComboBox<>();
         ObservableList<String> list = dropdown.getItems();
@@ -67,13 +67,12 @@ public class App extends Application {
                     } catch (IOException ex) {
                         ex.printStackTrace(); // or show an alert to the user
                     }
-                    g.getChildren().add(AtomsBonds.makeProtein(new Group(), 200, 200));
+                    g.getChildren().add(AtomsBonds.makeProtein(new Group(), 200, 200, 200));
                     break;
             }
         });
 
-        //Camera object
-        Camera cam = new PerspectiveCamera();
+        
 
         //group - collection of items put into stage
         // Group g = new Group();
@@ -85,7 +84,7 @@ public class App extends Application {
         // scene - window created (?)
         // 4th parameter always true to enable correct 3d behavior
         Scene s = new Scene(g, 1000, 500, true);
-        s.setFill(Color.BLANCHEDALMOND);
+        s.setFill(Color.BLACK);
 
         // how we are handling key presses here - instead or rotating the camera, we are rotating the world
         // and moving the group around - this is stupid code and not so efficient, but it works
@@ -125,23 +124,23 @@ public class App extends Application {
                     g.setTranslateZ(g.getTranslateZ() - 10);
                     break;
                 case D:// a/d is x axis changes
-                    g.setTranslateX(g.getTranslateX() + 10);
-                    break;
-                case A:
                     g.setTranslateX(g.getTranslateX() - 10);
                     break;
-                case S:// w/s is for y axis changes
-                    g.setTranslateY(g.getTranslateY() + 10);
+                case A:
+                    g.setTranslateX(g.getTranslateX() + 10);
                     break;
-                case W:
+                case S:// w/s is for y axis changes
                     g.setTranslateY(g.getTranslateY() - 10);
                     break;
+                case W:
+                    g.setTranslateY(g.getTranslateY() + 10);
+                    break;
                 case R:
-                    worldRotZ.setAngle(worldRotZ.getAngle() + 2);
+                    worldRotZ.setAngle(worldRotZ.getAngle() - 2);
                     System.out.println(worldRotZ);
                     break;
                 case F:
-                    worldRotZ.setAngle(worldRotZ.getAngle() - 2);
+                    worldRotZ.setAngle(worldRotZ.getAngle() + 2);
                     System.out.println(worldRotZ);
                     break;
                 // todo - get mouse controls to move the camera
@@ -174,9 +173,15 @@ public class App extends Application {
             double deltaX = e.getSceneX() - mouseAnchorX;
             double deltaY = e.getSceneY() - mouseAnchorY;
 
-            worldRotX.setAngle(worldRotX.getAngle() + deltaY/10);
-            worldRotY.setAngle(worldRotY.getAngle() - deltaX/10);
-
+            if (e.isPrimaryButtonDown()) {
+                // Left-click drag = rotate
+                worldRotX.setAngle(worldRotX.getAngle() - deltaY / 10);
+                worldRotY.setAngle(worldRotY.getAngle() - deltaX / 10);
+            } else if (e.isSecondaryButtonDown()) {
+                // Right-click drag = translate
+                g.setTranslateX(g.getTranslateX() + deltaX);
+                g.setTranslateY(g.getTranslateY() + deltaY);
+            }
             mouseAnchorX = e.getSceneX();
             mouseAnchorY = e.getSceneY();
         });   
