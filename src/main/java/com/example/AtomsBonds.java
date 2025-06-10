@@ -44,7 +44,7 @@ public class AtomsBonds {
         o.setMaterial(OxyM);
         return o;
     }
-    public static Sphere Hydrogen(int x, int y, int z) {
+    public static Sphere Hydrogen(double x, double y, double z) {
         Sphere h = new Sphere(20*(53.0/70));
         h.translateXProperty().set(x);
         h.translateYProperty().set(y);
@@ -156,25 +156,36 @@ public class AtomsBonds {
         b1.setTranslateZ(z + dBondDisplacement);
         protein.getChildren().add(b1);
 
+        // matrixRotateNode(b2, Math.toRadians(angle-12), Math.toRadians(30), Math.toRadians(0));
         matrixRotateNode(b2, Math.toRadians(angle-12), Math.toRadians(30), Math.toRadians(0));
+        System.out.println(Math.toRadians(angle-12));
         b2.setTranslateX(x - lBondDisplacement);
         b2.setTranslateY(y + 10);
         b2.setTranslateZ(z + dBondDisplacement);
         protein.getChildren().add(b2);
         
         // amino group
-        protein.getChildren().add(Nitrogen(x - 2*lBondDisplacement, y + 20, z + 2*dBondDisplacement));
-        
-        // Cylinder b3 = Bond(x-81, y+21, z);
-        // b3.rotateProperty().set(45);
+        double X = x - 2*lBondDisplacement;
+        double Y = y + 20;
+        double Z = z + 2*dBondDisplacement;
+        protein.getChildren().add(Nitrogen(X, Y, Z));
 
-        // Cylinder b4 = Bond(x-81, y-21, z);
-        // b4.rotateProperty().set(135);
+        Cylinder b3 = Bond(0, 0, 0); // x-81, y+21, z
+        matrixRotateNode(b3, Math.PI/2-0.991519, 0.524494, 0); // method is to find plane, rodriguez's theorem it w.r.t. nhat and then find unit vector and convert to spherical
+        protein.getChildren().add(b3);
+        b3.setTranslateX(X + 30*Math.sin(-0.579277));
+        b3.setTranslateY(Y - 30*Math.sin(0.524494));
+        b3.setTranslateZ(Z + 30*Math.sin(Math.PI/2-0.991519) -1);
 
-        // protein.getChildren().add(b3);
-        // protein.getChildren().add(b4);
-        // protein.getChildren().add(Hydrogen(x - 111, y + 42, z+300));
-        // protein.getChildren().add(Hydrogen(x - 111, y - 42, z));
+        Cylinder b4 = Bond(0,0,0); // x-81, y-21, z
+        matrixRotateNode(b4, Math.PI/2-1.12103671373, -1.24639325873, 0);
+        protein.getChildren().add(b4);
+        b4.setTranslateX(X + 15*Math.sin(0.962364910941) - 8);
+        b4.setTranslateY(Y + 15*Math.sin(1.24639325873));
+        b4.setTranslateZ(Z + 45*Math.sin(Math.PI/2-1.12103671373));
+
+        protein.getChildren().add(Hydrogen(X + 2*(15*Math.sin(0.962364910941) - 8), Y + 1.5*(15*Math.sin(1.24639325873)), Z + 2.4*(45*Math.sin(Math.PI/2-1.12103671373))));
+        protein.getChildren().add(Hydrogen(X + 2*(30*Math.sin(-0.579277)), Y - 2*(30*Math.sin(0.524494)), Z + 2*(30*Math.sin(Math.PI/2-0.991519) - 1)));
 
         // // carboxyl group
         // // todo - make this mathematically correct
@@ -223,7 +234,7 @@ public class AtomsBonds {
             n.setRotationAxis(p);
             n.setRotate(Math.toDegrees(d));    
         }
-        return n;                
+        return n;
     }
     
 }
