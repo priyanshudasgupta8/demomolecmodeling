@@ -7,7 +7,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Sphere;
-import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 // todo: find out the atomic sizes of each atom and match it to radius
 public class AtomsBonds {
@@ -18,7 +17,7 @@ public class AtomsBonds {
     so we have individual methods for each atom type
     yeah
     */
-    public static Sphere Carbon(int x, int y, int z) {
+    public static Sphere Carbon(double x, double y, double z) {
         Sphere c = new Sphere(20);
         c.translateXProperty().set(x);
         c.translateYProperty().set(y);
@@ -31,7 +30,7 @@ public class AtomsBonds {
         c.setMaterial(CarbM);
         return c;
     }
-    public static Sphere Oxygen(int x, int y, int z) {
+    public static Sphere Oxygen(double x, double y, double z) {
         Sphere o = new Sphere(25);
         o.translateXProperty().set(x);
         o.translateYProperty().set(y);
@@ -86,7 +85,7 @@ public class AtomsBonds {
         return b;
     }
 
-    public static Sphere Phosphorus(int x, int y, int z) {
+    public static Sphere Phosphorus(double x, double y, double z) {
         Sphere p = new Sphere(25);
         p.translateXProperty().set(x);
         p.translateYProperty().set(y);
@@ -119,7 +118,7 @@ public class AtomsBonds {
     // also i'm not gonna make 21 proteins skull emoji
 
     // todo - figure out if groups can be added to other groups w/out issues
-    public static Group makeProtein(Group R_group, int x, int y, int z) {
+    public static Group makeProtein(Group R_group, double x, double y, double z) {
         Group protein = new Group();
 
         // alpha carbon + hydrogen
@@ -138,6 +137,12 @@ public class AtomsBonds {
         r.setRotate((180.0*Math.acos(-1.0/3))/Math.PI);
         
         protein.getChildren().add(r);
+        protein.getChildren().add(R_group);
+        
+        R_group.setRotationAxis(Rotate.X_AXIS);
+        R_group.setRotate((180.0*Math.acos(-1.0/3))/Math.PI);
+        R_group.setTranslateZ( 20.0*Math.sqrt(2)/3);
+        R_group.setTranslateY(-45);
 
 
         double angle = (195.0 * Math.acos(-1.0 / 3)) / Math.PI; // Angle in degrees b/w atoms
@@ -187,32 +192,57 @@ public class AtomsBonds {
         protein.getChildren().add(Hydrogen(X + 2*(15*Math.sin(0.962364910941) - 8), Y + 1.5*(15*Math.sin(1.24639325873)), Z + 2.4*(45*Math.sin(Math.PI/2-1.12103671373))));
         protein.getChildren().add(Hydrogen(X + 2*(30*Math.sin(-0.579277)), Y - 2*(30*Math.sin(0.524494)), Z + 2*(30*Math.sin(Math.PI/2-0.991519) - 1)));
 
-        // // carboxyl group
-        // // todo - make this mathematically correct
-        // protein.getChildren().add(Carbon(x + 60, y+15, z));
-        // Cylinder b5 = Bond(x + 90, y - 6, z);
-        // b5.rotateProperty().set(45);
-        // protein.getChildren().add(b5);
-        // Cylinder b52 = Bond(x + 68, y - 17, z);
-        // b52.rotateProperty().set(45);
-        // protein.getChildren().add(b52);
-
-        // protein.getChildren().add(Oxygen(x + 95, y - 35, z));
         
+        // carboxyl group
+        double Xi = x + 2*rBondDisplacement;
+        double Yi = y + 20;
+        
+        protein.getChildren().add(Carbon(Xi+rBondDisplacement, Yi+5, Z-4));
+        Cylinder b5 = Bond(Xi+2*rBondDisplacement, Yi-20, Z);
+        Cylinder b5_1 = Bond((Xi+2*rBondDisplacement)-10, Yi-25, Z-4);
+
+        
+        double arb = Math.sqrt( (Math.pow(Math.cos(Math.toRadians(30)), 2)) + 
+        (Math.pow(Math.sin(Math.toRadians(60)), 2)) );
 
 
-        // Cylinder b6 = Bond(x + 90, y + 36, z);
-        // b6.rotateProperty().set(135);
-        // protein.getChildren().add(b6);
-        // protein.getChildren().add(Oxygen(x + 111, y + 57, z));
-        // Cylinder b7 = Bond(x + 111, y + 87, z);
-        // protein.getChildren().add(b7);
-        // protein.getChildren().add(Hydrogen(x + 111, y + 117, z+200));
+        double COxylAngX = Math.acos(Math.cos(Math.toRadians(30))/arb);
+        double COxylAngY = Math.asin(Math.sin(Math.toRadians(60))/arb);
+        matrixRotateNode(b5, Math.toRadians(angle+COxylAngX), Math.toRadians(30+COxylAngY), Math.toRadians(90));
+        matrixRotateNode(b5_1, Math.toRadians(angle+COxylAngX), Math.toRadians(30+COxylAngY), Math.toRadians(90));
+
+        protein.getChildren().add(Oxygen(Xi+(2.5*rBondDisplacement), Yi-52.5, Z-2));
 
 
+        Cylinder b6 = Bond(Xi+2*rBondDisplacement, Yi+30, Z-4);
+        matrixRotateNode(b6, Math.toRadians(-(angle+COxylAngX)), Math.toRadians(-(30+COxylAngY)), Math.toRadians(90));
+        protein.getChildren().add(Oxygen(Xi+(3*rBondDisplacement), Yi+60, Z-2));
 
+        
+        protein.getChildren().add(b5);
+        protein.getChildren().add(b5_1);
+        protein.getChildren().add(b6);
 
         return protein;
+    }
+    public static Group Al(double x, double y, double z) {
+        Group Al = new Group();
+
+        double arb = Math.sqrt( (Math.pow(Math.cos(Math.toRadians(71)), 2)) + (Math.pow(Math.sin(Math.toRadians(71)), 2)) );
+        double AlaAngZ = Math.acos(Math.cos(Math.toRadians(71))/arb);
+        double AlaAngY = Math.acos(Math.sin(Math.toRadians(71))/arb);
+
+        Al.getChildren().add(Carbon(x, y, z));
+
+        Cylinder b1 = Bond(x, y-(30*Math.sin(19)) , z+100);
+        matrixRotateNode(b1, Math.toRadians(0), Math.toRadians(AlaAngY), Math.toRadians(AlaAngZ));
+        Al.getChildren().add(b1);
+        Al.getChildren().add(Hydrogen(x, y + 90*(Math.sin(19)), z-(120*Math.sin(Math.toRadians(79)))));
+
+        //Cylinder b2 = Bond(x , y + 60*Math.sin(Math.toRadians(19)), z - (60*Math.sin(Math.toRadians(79))));
+        //matrixRotateNode(b2, Math.toRadians(180), Math.toRadians(AlaAngY), Math.toRadians(AlaAngX));
+        
+        return Al;
     }
 
     // 1 AM grind; i give up on trying alternatives matrices it is
