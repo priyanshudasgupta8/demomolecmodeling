@@ -69,7 +69,7 @@ public class App extends Application {
                 case "Glucose":
                     g.getChildren().remove(p);
                     g.getChildren().add(dropdown);
-                    g.getChildren().add(AtomsBonds.Phosphorus(200, 200, 200));
+                    g.getChildren().add(AtomsBonds.makeGlucose(200, 200, 200));
                     break;
             }
         });

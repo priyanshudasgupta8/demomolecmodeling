@@ -31,7 +31,7 @@ public class AtomsBonds {
         return c;
     }
     public static Sphere Oxygen(double x, double y, double z) {
-        Sphere o = new Sphere(25);
+        Sphere o = new Sphere(20);
         o.translateXProperty().set(x);
         o.translateYProperty().set(y);
         o.translateZProperty().set(z);
@@ -44,7 +44,7 @@ public class AtomsBonds {
         return o;
     }
     public static Sphere Hydrogen(double x, double y, double z) {
-        Sphere h = new Sphere(20*(53.0/70));
+        Sphere h = new Sphere(15);
         h.translateXProperty().set(x);
         h.translateYProperty().set(y);
         h.translateZProperty().set(z);
@@ -57,7 +57,7 @@ public class AtomsBonds {
         return h;
     }
     public static Sphere Nitrogen(double x, double y, double z) {
-        Sphere n = new Sphere(20/1.07);
+        Sphere n = new Sphere(20);
         n.translateXProperty().set(x);
         n.translateYProperty().set(y);
         n.translateZProperty().set(z);
@@ -86,7 +86,7 @@ public class AtomsBonds {
     }
 
     public static Sphere Phosphorus(double x, double y, double z) {
-        Sphere p = new Sphere(25);
+        Sphere p = new Sphere(20);
         p.translateXProperty().set(x);
         p.translateYProperty().set(y);
         p.translateZProperty().set(z);
@@ -100,7 +100,7 @@ public class AtomsBonds {
     }
 
     public static Sphere Sulfur(int x, int y, int z) {
-        Sphere s = new Sphere(25);
+        Sphere s = new Sphere(20);
         s.translateXProperty().set(x);
         s.translateYProperty().set(y);
         s.translateZProperty().set(z);
@@ -218,13 +218,22 @@ public class AtomsBonds {
         matrixRotateNode(b6, Math.toRadians(-(angle+COxylAngX)), Math.toRadians(-(30+COxylAngY)), Math.toRadians(90));
         protein.getChildren().add(Oxygen(Xi+(3*rBondDisplacement), Yi+60, Z-2));
 
+        Cylinder b7 = Bond(0,0,0);
+        matrixRotateNode(b7, Math.toRadians(-(angle+COxylAngX)), Math.PI-Math.toRadians(-(30+COxylAngY)),0);
+        b7.setTranslateX(Xi+4*rBondDisplacement);
+        b7.setTranslateY(Yi+70);
+        b7.setTranslateZ(Z+12);
+        protein.getChildren().add(Hydrogen(Xi+5*rBondDisplacement, Yi+80, Z+24));
+
         
         protein.getChildren().add(b5);
         protein.getChildren().add(b5_1);
         protein.getChildren().add(b6);
+        protein.getChildren().add(b7);
 
         return protein;
     }
+
     public static Group Al(double x, double y, double z) {
         Group Al = new Group();
 
@@ -232,17 +241,182 @@ public class AtomsBonds {
         double AlaAngZ = Math.acos(Math.cos(Math.toRadians(71))/arb);
         double AlaAngY = Math.acos(Math.sin(Math.toRadians(71))/arb);
 
-        Al.getChildren().add(Carbon(x, y, z));
+        // Al.getChildren().add(Carbon(x, y-10, z));
 
         Cylinder b1 = Bond(x, y-(30*Math.sin(19)) , z+100);
         matrixRotateNode(b1, Math.toRadians(0), Math.toRadians(AlaAngY), Math.toRadians(AlaAngZ));
         Al.getChildren().add(b1);
-        Al.getChildren().add(Hydrogen(x, y + 90*(Math.sin(19)), z-(120*Math.sin(Math.toRadians(79)))));
+        Al.getChildren().add(Hydrogen(x, y - 950*(Math.sin(19)), z-(120*Math.sin(Math.toRadians(79)))-15));
 
-        //Cylinder b2 = Bond(x , y + 60*Math.sin(Math.toRadians(19)), z - (60*Math.sin(Math.toRadians(79))));
-        //matrixRotateNode(b2, Math.toRadians(180), Math.toRadians(AlaAngY), Math.toRadians(AlaAngX));
+        // Cylinder b2 = Bond(x , y + 60*Math.sin(Math.toRadians(19)), z - (60*Math.sin(Math.toRadians(79))));
+        // matrixRotateNode(b2, Math.toRadians(180), Math.toRadians(AlaAngY), Math.toRadians(AlaAngZ));
         
         return Al;
+    }
+
+    public static Group makeGlucose(double x, double y, double z) {
+        Group glucose = new Group();
+
+        glucose.getChildren().add(Carbon(200,200,200));
+        Cylinder b1 = Bond(0,0,0);
+        matrixRotateNode(b1, Math.toRadians(90), 0, 0);
+        b1.setTranslateX(235);
+        b1.setTranslateY(200);
+        b1.setTranslateZ(200);
+        glucose.getChildren().add(b1);
+
+        glucose.getChildren().add(Oxygen(270,200,200));
+        Cylinder b2 = Bond(0,0,0);
+        matrixRotateNode(b2, Math.toRadians(30), 0, 0);
+        b2.setTranslateX(270+35*Math.cos(Math.toRadians(60)));
+        b2.setTranslateY(200+35*Math.sin(Math.toRadians(60)));
+        b2.setTranslateZ(200);
+        glucose.getChildren().add(b2);
+
+        glucose.getChildren().add(Carbon(270+70*Math.cos(Math.toRadians(60)),200+70*Math.sin(Math.toRadians(60)),200));
+        Cylinder b3 = Bond(0,0,0);
+        matrixRotateNode(b3, Math.toRadians(-30), 0, 0);
+        b3.setTranslateX(200-35*Math.cos(Math.toRadians(60)));
+        b3.setTranslateY(200+35*Math.sin(Math.toRadians(60)));
+        b3.setTranslateZ(200);
+        glucose.getChildren().add(b3);
+
+        //9oclock
+        glucose.getChildren().add(Carbon(200-70*Math.cos(Math.toRadians(60)),200+70*Math.sin(Math.toRadians(60)),200));
+        Cylinder b4 = Bond(0,0,0);
+        matrixRotateNode(b4, Math.toRadians(30), 0, 0);
+        b4.setTranslateX(200-35*Math.cos(Math.toRadians(60)));
+        b4.setTranslateY(200+105*Math.sin(Math.toRadians(60)));
+        b4.setTranslateZ(200);
+        glucose.getChildren().add(b4);
+
+        glucose.getChildren().add(Carbon(200,200+140*Math.sin(Math.toRadians(60)),200));
+        Cylinder b5 = Bond(0,0,0);
+        matrixRotateNode(b5, Math.toRadians(-30), 0, 0);
+        b5.setTranslateX(270+35*Math.cos(Math.toRadians(60)));
+        b5.setTranslateY(200+105*Math.sin(Math.toRadians(60)));
+        b5.setTranslateZ(200);
+        glucose.getChildren().add(b5);
+
+        glucose.getChildren().add(Carbon(270,200+140*Math.sin(Math.toRadians(60)),200));
+        Cylinder b6 = Bond(0,0,0);
+        matrixRotateNode(b6, Math.toRadians(90), 0, 0);
+        b6.setTranslateX(235);
+        b6.setTranslateY(200+140*Math.sin(Math.toRadians(60)));
+        b6.setTranslateZ(200);
+        glucose.getChildren().add(b6);
+
+        //9oclock
+        glucose.getChildren().add(Hydrogen(200-70*Math.cos(Math.toRadians(60))-(70/Math.sqrt(2)),200+70*Math.sin(Math.toRadians(60)),200-(70/Math.sqrt(2))));
+        Cylinder b9 = Bond(0,0,0);
+        matrixRotateNode(b9, Math.toRadians(90), Math.toRadians(-45), 0);
+        b9.setTranslateX(200-70*Math.cos(Math.toRadians(60))-(35/Math.sqrt(2)));
+        b9.setTranslateY(200+70*Math.sin(Math.toRadians(60)));
+        b9.setTranslateZ(200-(35/Math.sqrt(2)));
+        glucose.getChildren().add(b9);
+
+        glucose.getChildren().add(Oxygen(200-70*Math.cos(Math.toRadians(60))-(70/Math.sqrt(2)),200+70*Math.sin(Math.toRadians(60)),200+(70/Math.sqrt(2))));
+        glucose.getChildren().add(Hydrogen(200-70*Math.cos(Math.toRadians(60))-(70/Math.sqrt(2)),200+70*Math.sin(Math.toRadians(60)),200+(70/Math.sqrt(2))+18));
+        Cylinder b10 = Bond(0,0,0);
+        matrixRotateNode(b10, Math.toRadians(90), Math.toRadians(45), 0);
+        b10.setTranslateX(200-70*Math.cos(Math.toRadians(60))-(35/Math.sqrt(2)));
+        b10.setTranslateY(200+70*Math.sin(Math.toRadians(60)));
+        b10.setTranslateZ(200+(35/Math.sqrt(2)));
+        glucose.getChildren().add(b10);
+
+        // 3 O CLOCK
+        glucose.getChildren().add(Oxygen(270+70*Math.cos(Math.toRadians(60))+(70/Math.sqrt(2)),200+70*Math.sin(Math.toRadians(60)),200-(70/Math.sqrt(2))));
+        glucose.getChildren().add(Hydrogen(270+70*Math.cos(Math.toRadians(60))+(70/Math.sqrt(2)),200+70*Math.sin(Math.toRadians(60)),200-(70/Math.sqrt(2))-18));
+
+        Cylinder b11 = Bond(0,0,0);
+        matrixRotateNode(b11, Math.toRadians(90), Math.toRadians(45), 0);
+        b11.setTranslateX(270+70*Math.cos(Math.toRadians(60))+(35/Math.sqrt(2)));
+        b11.setTranslateY(200+70*Math.sin(Math.toRadians(60)));
+        b11.setTranslateZ(200-(35/Math.sqrt(2)));
+        glucose.getChildren().add(b11);
+
+        glucose.getChildren().add(Hydrogen(270+70*Math.cos(Math.toRadians(60))+(70/Math.sqrt(2)),200+70*Math.sin(Math.toRadians(60)),200+(70/Math.sqrt(2))));        
+        Cylinder b12 = Bond(0,0,0);
+        matrixRotateNode(b12, Math.toRadians(90), Math.toRadians(-45), 0);
+        b12.setTranslateX(270+70*Math.cos(Math.toRadians(60))+(35/Math.sqrt(2)));
+        b12.setTranslateY(200+70*Math.sin(Math.toRadians(60)));
+        b12.setTranslateZ(200+(35/Math.sqrt(2)));
+        glucose.getChildren().add(b12);
+
+        //7oclock
+        glucose.getChildren().add(Oxygen(200-(70/Math.sqrt(2))*Math.cos(Math.toRadians(60)),200+140*Math.cos(Math.toRadians(30))+(70/Math.sqrt(2))*Math.sin(Math.toRadians(60)),200-(70/Math.sqrt(2))));
+        glucose.getChildren().add(Hydrogen(200-(70/Math.sqrt(2))*Math.cos(Math.toRadians(60)),200+140*Math.cos(Math.toRadians(30))+(70/Math.sqrt(2))*Math.sin(Math.toRadians(60)),200-(70/Math.sqrt(2))-18));
+        Cylinder b13 = Bond(0,0,0);
+        matrixRotateNode(b13, Math.toRadians(150), Math.toRadians(-45), 0);
+        b13.setTranslateX(200-(35/Math.sqrt(2))*Math.cos(Math.toRadians(60)));
+        b13.setTranslateY(200+140*Math.cos(Math.toRadians(30))+(35/Math.sqrt(2))*Math.sin(Math.toRadians(60)));
+        b13.setTranslateZ(200-(35/Math.sqrt(2)));
+        glucose.getChildren().add(b13);
+
+        glucose.getChildren().add(Hydrogen(200-(70/Math.sqrt(2))*Math.cos(Math.toRadians(60)),200+140*Math.cos(Math.toRadians(30))+(70/Math.sqrt(2))*Math.sin(Math.toRadians(60)),200+(70/Math.sqrt(2))));
+        Cylinder b14 = Bond(0,0,0);
+        matrixRotateNode(b14, Math.toRadians(150), Math.toRadians(45), 0);
+        b14.setTranslateX(200-(35/Math.sqrt(2))*Math.cos(Math.toRadians(60)));
+        b14.setTranslateY(200+140*Math.cos(Math.toRadians(30))+(35/Math.sqrt(2))*Math.sin(Math.toRadians(60)));
+        b14.setTranslateZ(200+(35/Math.sqrt(2)));
+        glucose.getChildren().add(b14);
+
+        //5oclock
+        glucose.getChildren().add(Hydrogen(270+(70/Math.sqrt(2))*Math.cos(Math.toRadians(60)),200+140*Math.cos(Math.toRadians(30))+(70/Math.sqrt(2))*Math.sin(Math.toRadians(60)),200-(70/Math.sqrt(2))));
+        Cylinder b15 = Bond(0,0,0);
+        matrixRotateNode(b15, Math.toRadians(-150), Math.toRadians(-45), 0);
+        b15.setTranslateX(270+(35/Math.sqrt(2))*Math.cos(Math.toRadians(60)));
+        b15.setTranslateY(200+140*Math.cos(Math.toRadians(30))+(35/Math.sqrt(2))*Math.sin(Math.toRadians(60)));
+        b15.setTranslateZ(200-(35/Math.sqrt(2)));
+        glucose.getChildren().add(b15);
+
+        glucose.getChildren().add(Oxygen(270+(70/Math.sqrt(2))*Math.cos(Math.toRadians(60)),200+140*Math.cos(Math.toRadians(30))+(70/Math.sqrt(2))*Math.sin(Math.toRadians(60)),200+(70/Math.sqrt(2))));
+        glucose.getChildren().add(Hydrogen(270+(70/Math.sqrt(2))*Math.cos(Math.toRadians(60)),200+140*Math.cos(Math.toRadians(30))+(70/Math.sqrt(2))*Math.sin(Math.toRadians(60)),200+(70/Math.sqrt(2))+18));
+        Cylinder b16 = Bond(0,0,0);
+        matrixRotateNode(b16, Math.toRadians(-150), Math.toRadians(45), 0);
+        b16.setTranslateX(270+(35/Math.sqrt(2))*Math.cos(Math.toRadians(60)));
+        b16.setTranslateY(200+140*Math.cos(Math.toRadians(30))+(35/Math.sqrt(2))*Math.sin(Math.toRadians(60)));
+        b16.setTranslateZ(200+(35/Math.sqrt(2)));
+        glucose.getChildren().add(b16);
+
+        // 11 O Clock
+        glucose.getChildren().add(Carbon(200-(70/Math.sqrt(2))*Math.cos(Math.toRadians(60)),200-(70/Math.sqrt(2))*Math.sin(Math.toRadians(60)),200-(70/Math.sqrt(2))));
+        Cylinder b7 = Bond(0,0,0);
+        matrixRotateNode(b7, Math.toRadians(30), Math.toRadians(-45), 0);
+        b7.setTranslateX(200-(35/Math.sqrt(2))*Math.cos(Math.toRadians(60)));
+        b7.setTranslateY(200-(35/Math.sqrt(2))*Math.sin(Math.toRadians(60)));
+        b7.setTranslateZ(200-(35/Math.sqrt(2)));
+        glucose.getChildren().add(b7);
+
+        glucose.getChildren().add(Hydrogen(200-(70/Math.sqrt(2))*Math.cos(Math.toRadians(60)),200-(70/Math.sqrt(2))*Math.sin(Math.toRadians(60)),200+(70/Math.sqrt(2))));
+        Cylinder b8 = Bond(0,0,0);
+        matrixRotateNode(b8, Math.toRadians(30), Math.toRadians(45), 0);
+        b8.setTranslateX(200-(35/Math.sqrt(2))*Math.cos(Math.toRadians(60)));
+        b8.setTranslateY(200-(35/Math.sqrt(2))*Math.sin(Math.toRadians(60)));
+        b8.setTranslateZ(200+(35/Math.sqrt(2)));
+        glucose.getChildren().add(b8);
+
+        glucose.getChildren().add(Oxygen(
+            200-(70/Math.sqrt(2))*Math.cos(Math.toRadians(60)),
+            200-(70/Math.sqrt(2))*Math.sin(Math.toRadians(60)),
+            200-(70/Math.sqrt(2))-70
+        ));
+        glucose.getChildren().add(Hydrogen(
+            200-(70/Math.sqrt(2))*Math.cos(Math.toRadians(60)),
+            200-(70/Math.sqrt(2))*Math.sin(Math.toRadians(60)),
+            200-(70/Math.sqrt(2))-88
+        ));
+        Cylinder b17 = Bond(0,0,0);
+        matrixRotateNode(b17, Math.toRadians(0), Math.toRadians(-90), 0);
+        b17.setTranslateX(200-(70/Math.sqrt(2))*Math.cos(Math.toRadians(60)));
+        b17.setTranslateY(200-(70/Math.sqrt(2))*Math.sin(Math.toRadians(60)));
+        b17.setTranslateZ(200-(70/Math.sqrt(2))-35);
+        glucose.getChildren().add(b17);
+
+
+
+
+        return glucose;
     }
 
     // 1 AM grind; i give up on trying alternatives matrices it is
