@@ -139,10 +139,11 @@ public class AtomsBonds {
         protein.getChildren().add(r);
         protein.getChildren().add(R_group);
         
-        R_group.setRotationAxis(Rotate.X_AXIS);
-        R_group.setRotate((180.0*Math.acos(-1.0/3))/Math.PI);
-        R_group.setTranslateZ( 20.0*Math.sqrt(2)/3);
-        R_group.setTranslateY(-45);
+        //R_group.setRotationAxis(Rotate.X_AXIS);
+        //R_group.setRotate((180.0*Math.acos(-1.0/3))/Math.PI);
+        R_group.setTranslateZ(-70);
+        R_group.setTranslateY(15);
+        
 
 
         double angle = (195.0 * Math.acos(-1.0 / 3)) / Math.PI; // Angle in degrees b/w atoms
@@ -231,13 +232,31 @@ public class AtomsBonds {
         double arb = Math.sqrt( (Math.pow(Math.cos(Math.toRadians(71)), 2)) + (Math.pow(Math.sin(Math.toRadians(71)), 2)) );
         double AlaAngZ = Math.acos(Math.cos(Math.toRadians(71))/arb);
         double AlaAngY = Math.acos(Math.sin(Math.toRadians(71))/arb);
+        System.out.println(AlaAngZ + " " + AlaAngY);
 
         Al.getChildren().add(Carbon(x, y, z));
 
-        Cylinder b1 = Bond(x, y-(30*Math.sin(19)) , z+100);
+        Cylinder b1 = Bond(x, y+(150*Math.sin(19)) , z-(10*Math.sin(Math.toRadians(71))));
         matrixRotateNode(b1, Math.toRadians(0), Math.toRadians(AlaAngY), Math.toRadians(AlaAngZ));
         Al.getChildren().add(b1);
-        Al.getChildren().add(Hydrogen(x, y + 90*(Math.sin(19)), z-(120*Math.sin(Math.toRadians(79)))));
+        Al.getChildren().add(Hydrogen(x, y + (60*Math.sin(71)), z-(10*Math.sin(Math.toRadians(71)))));
+
+        Cylinder b2 = Bond(x+(30*Math.cos(Math.toRadians(19))), y-(30*Math.sin(Math.toRadians(71))), z - (10*Math.sin(Math.toRadians(71))));
+        Cylinder b3 = Bond(x-(30*Math.cos(Math.toRadians(19))), y-(30*Math.sin(Math.toRadians(71))), z - (5*Math.sin(Math.toRadians(71))));
+        Al.getChildren().add(Hydrogen(x+(57*Math.cos(Math.toRadians(19))), y-(57*Math.sin(Math.toRadians(71))), z - (20*Math.sin(Math.toRadians(71)))));
+        Al.getChildren().add(Hydrogen(x-(57*Math.cos(Math.toRadians(19))), y-(57*Math.sin(Math.toRadians(71))), z - (2*Math.sin(Math.toRadians(71)))));
+
+        double arb1 = Math.sqrt( (Math.pow(Math.cos(Math.toRadians(71)), 2)) + (Math.pow(Math.sin(Math.toRadians(71)) + 
+        (Math.cos(Math.toRadians(19))), 2)) );
+        double AlaAngX = Math.acos(Math.cos(Math.toRadians(71))/arb1);
+        double AlaAngY1 = Math.acos(Math.sin(Math.toRadians(71))/arb1);
+        double AlaAngZ1 = Math.acos(Math.sin(Math.toRadians(19))/arb1);
+
+        matrixRotateNode(b2, AlaAngX, AlaAngY1, AlaAngZ1);
+        matrixRotateNode(b3, -AlaAngX, -AlaAngY1, AlaAngZ1);
+
+        Al.getChildren().add(b2);
+        Al.getChildren().add(b3);
 
         //Cylinder b2 = Bond(x , y + 60*Math.sin(Math.toRadians(19)), z - (60*Math.sin(Math.toRadians(79))));
         //matrixRotateNode(b2, Math.toRadians(180), Math.toRadians(AlaAngY), Math.toRadians(AlaAngX));
