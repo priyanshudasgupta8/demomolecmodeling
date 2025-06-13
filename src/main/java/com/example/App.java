@@ -91,25 +91,30 @@ public class App extends Application {
                 */
                 case Q: // shift/control is for z axis changes
                     g.setTranslateZ(g.getTranslateZ() + 10);
+                    dropdown.setTranslateZ(dropdown.getTranslateZ()-10);
                     break;
                 case E:
                     g.setTranslateZ(g.getTranslateZ() - 10);
+                    dropdown.setTranslateZ(dropdown.getTranslateZ()+10);
                     break;
                 case D:// a/d is x axis changes
                     g.setTranslateX(g.getTranslateX() - 10);
+                    dropdown.setTranslateX(dropdown.getTranslateX()+10);
                     break;
                 case A:
                     g.setTranslateX(g.getTranslateX() + 10);
+                    dropdown.setTranslateX(dropdown.getTranslateX()-10);
                     break;
                 case S:// w/s is for y axis changes
                     g.setTranslateY(g.getTranslateY() - 10);
+                    dropdown.setTranslateY(dropdown.getTranslateY()+10);
                     break;
                 case W:
                     g.setTranslateY(g.getTranslateY() + 10);
+                    dropdown.setTranslateY(dropdown.getTranslateY()-10);
                     break;
                 case R:
                     worldRotZ.setAngle(worldRotZ.getAngle() - 2);
-                    System.out.println(worldRotZ);
                     break;
                 case F:
                     worldRotZ.setAngle(worldRotZ.getAngle() + 2);
@@ -121,9 +126,11 @@ public class App extends Application {
                 case SPACE: // space key to reset the camera
                     worldRotX.setAngle(0);
                     worldRotY.setAngle(0);
+                    worldRotZ.setAngle(0);
                     g.setTranslateX(0);
                     g.setTranslateY(0);
                     g.setTranslateZ(0);
+                    System.out.println("Resetting camera and world rotation");
                     break;
                 default:
                     break;
