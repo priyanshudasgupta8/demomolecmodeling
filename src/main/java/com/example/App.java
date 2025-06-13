@@ -43,17 +43,8 @@ public class App extends Application {
 
         ComboBox dropdown = new ComboBox<>();
         ObservableList<String> list = dropdown.getItems();
-
-
-        list.add("Amino Acids");
-        // list.add("DNA"); - commented out because we don't have a DNA model yet
-        // list.add("RNA"); - commented out because we don't have a RNA model yet
-        // list.add("Cis Fatty Acid");
-        // list.add("Trans Fatty Acid");
-        // list.add("Triglyceride");
-        // list.add("Phospholipid");
+        list.add("Alanine");
         list.add("Glucose");
-        // list.add("Fructose");
 
         root.setTop(dropdown);
 
@@ -61,7 +52,7 @@ public class App extends Application {
             String selected = (String) dropdown.getValue();
             g.getChildren().clear(); // clear the group before adding new items
             switch (selected) {
-                case "Amino Acids":
+                case "Alanine":
                     g.getChildren().remove(p);
                     g.getChildren().add(dropdown);
                     g.getChildren().add(AtomsBonds.makeProtein(AtomsBonds.Al(200, 200, 200), 200, 200, 200));
@@ -100,43 +91,46 @@ public class App extends Application {
                 */
                 case Q: // shift/control is for z axis changes
                     g.setTranslateZ(g.getTranslateZ() + 10);
-                    
+                    dropdown.setTranslateZ(dropdown.getTranslateZ()-10);
                     break;
                 case E:
                     g.setTranslateZ(g.getTranslateZ() - 10);
+                    dropdown.setTranslateZ(dropdown.getTranslateZ()+10);
                     break;
                 case D:// a/d is x axis changes
                     g.setTranslateX(g.getTranslateX() - 10);
+                    dropdown.setTranslateX(dropdown.getTranslateX()+10);
                     break;
                 case A:
                     g.setTranslateX(g.getTranslateX() + 10);
+                    dropdown.setTranslateX(dropdown.getTranslateX()-10);
                     break;
                 case S:// w/s is for y axis changes
                     g.setTranslateY(g.getTranslateY() - 10);
+                    dropdown.setTranslateY(dropdown.getTranslateY()+10);
                     break;
                 case W:
                     g.setTranslateY(g.getTranslateY() + 10);
+                    dropdown.setTranslateY(dropdown.getTranslateY()-10);
                     break;
                 case R:
                     worldRotZ.setAngle(worldRotZ.getAngle() - 2);
-                    System.out.println(worldRotZ);
                     break;
                 case F:
                     worldRotZ.setAngle(worldRotZ.getAngle() + 2);
                     System.out.println(worldRotZ);
                     break;
-                // todo - get mouse controls to move the camera
-                // todo - add key controls to change the molecule shown
-                // todo - add overlay UI to show controls and molecule info
                 case ESCAPE: // escape key to exit
                     System.exit(0);
                     break;
                 case SPACE: // space key to reset the camera
                     worldRotX.setAngle(0);
                     worldRotY.setAngle(0);
+                    worldRotZ.setAngle(0);
                     g.setTranslateX(0);
                     g.setTranslateY(0);
                     g.setTranslateZ(0);
+                    System.out.println("Resetting camera and world rotation");
                     break;
                 default:
                     break;
