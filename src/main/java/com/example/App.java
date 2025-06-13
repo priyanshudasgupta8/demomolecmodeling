@@ -1,5 +1,4 @@
 package com.example;
-
 import java.io.IOException;
 
 import javafx.application.Application;
@@ -34,8 +33,9 @@ public class App extends Application {
         BorderPane root = new BorderPane();
         
         stage.setTitle("test");
-
-        Group g = AtomsBonds.makeProtein(new Group(), 200, 200, 200);
+        Group g = new Group();
+        Group p = AtomsBonds.makeProtein(AtomsBonds.Al(200, 200, 200), 200, 200, 200);
+        g.getChildren().add(p);
         g.getChildren().add(root);
 
         //Camera object
@@ -48,12 +48,12 @@ public class App extends Application {
         list.add("Amino Acids");
         // list.add("DNA"); - commented out because we don't have a DNA model yet
         // list.add("RNA"); - commented out because we don't have a RNA model yet
-        list.add("Cis Fatty Acid");
-        list.add("Trans Fatty Acid");
-        list.add("Triglyceride");
-        list.add("Phospholipid");
+        // list.add("Cis Fatty Acid");
+        // list.add("Trans Fatty Acid");
+        // list.add("Triglyceride");
+        // list.add("Phospholipid");
         list.add("Glucose");
-        list.add("Fructose");
+        // list.add("Fructose");
 
         root.setTop(dropdown);
 
@@ -62,24 +62,18 @@ public class App extends Application {
             g.getChildren().clear(); // clear the group before adding new items
             switch (selected) {
                 case "Amino Acids":
-                    try {
-                        setRoot("secondary"); // Line 65 — now handled properly
-                    } catch (IOException ex) {
-                        ex.printStackTrace(); // or show an alert to the user
-                    }
-                    g.getChildren().add(AtomsBonds.makeProtein(new Group(), 200, 200, 200));
+                    g.getChildren().remove(p);
+                    g.getChildren().add(dropdown);
+                    g.getChildren().add(AtomsBonds.makeProtein(AtomsBonds.Al(200, 200, 200), 200, 200, 200));
+                    break;
+                case "Glucose":
+                    g.getChildren().remove(p);
+                    g.getChildren().add(dropdown);
+                    g.getChildren().add(AtomsBonds.Phosphorus(200, 200, 200));
                     break;
             }
         });
 
-        
-
-        //group - collection of items put into stage
-        // Group g = new Group();
-
-        // remeber that we can add groups to groups
-        // so we can build complex shapes by creating small groups and sticking them together
-        Group g2 = new Group();
 
         // scene - window created (?)
         // 4th parameter always true to enable correct 3d behavior
@@ -100,25 +94,13 @@ public class App extends Application {
             switch(event.getCode()){
                 /*  left right rotations
                 this is the rotation of the world, *not the camera* (!!!!!!!!)
-                this is fucking terrible code and is absolutely suboptimal, but it works
+                this is ******* terrible code and is absolutely suboptimal, but it works
                 alternative is matrix transformations and we need methods knowledge to do that 
                 etaash mathamsetty couldn't figure it out so we're doing it this way
                 */
-                case LEFT:
-                    worldRotY.setAngle(worldRotY.getAngle() + 2);
-                    break;
-                case RIGHT:
-                    worldRotY.setAngle(worldRotY.getAngle() - 2);
-                    break;
-                // up down rotations
-                case UP:
-                    worldRotX.setAngle(worldRotX.getAngle() + 2);
-                    break;
-                case DOWN:
-                    worldRotX.setAngle(worldRotX.getAngle() - 2);
-                    break;
                 case Q: // shift/control is for z axis changes
                     g.setTranslateZ(g.getTranslateZ() + 10);
+                    
                     break;
                 case E:
                     g.setTranslateZ(g.getTranslateZ() - 10);
